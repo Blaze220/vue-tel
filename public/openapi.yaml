@@ -1,0 +1,515 @@
+openapi: 3.0.0
+info:
+  title: 'PhoneBook API'
+  description: 'API тестового задания для фронтенд-разработчиков'
+  version: 1.0.0
+paths:
+  /records:
+    get:
+      tags:
+        - Записи
+      summary: Коллекция
+      operationId: c8c10fb7585ff692f63d9dd8577bfb1c
+      parameters:
+        -
+          name: page
+          in: query
+          description: 'Номер страницы для пагинации'
+          required: false
+          schema:
+            type: integer
+        -
+          name: sort
+          in: query
+          description: 'Поле для сортировки'
+          required: false
+          schema:
+            type: string
+          example: '-id'
+        -
+          name: f
+          in: query
+          description: 'Поиск по фамилии'
+          required: false
+          schema:
+            type: string
+        -
+          name: i
+          in: query
+          description: 'Поиск по имени'
+          required: false
+          schema:
+            type: string
+        -
+          name: o
+          in: query
+          description: 'Поиск по отчеству'
+          required: false
+          schema:
+            type: string
+        -
+          name: city
+          in: query
+          description: 'Поиск по городу'
+          required: false
+          schema:
+            type: string
+        -
+          name: address
+          in: query
+          description: 'Поиск по адресу'
+          required: false
+          schema:
+            type: string
+        -
+          name: birthday
+          in: query
+          description: 'Поиск по дате рождения'
+          required: false
+          schema:
+            type: string
+        -
+          name: phone
+          in: query
+          description: 'Поиск по номеру телефону'
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                properties:
+                  items: { type: array, items: { $ref: '#/components/schemas/Record' } }
+                  _meta: { $ref: '#/components/schemas/PaginationMeta' }
+                type: object
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+    post:
+      tags:
+        - Записи
+      summary: Создание
+      operationId: 12f0360a31e44cb88454088627e8aef3
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordBody'
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        '400':
+          description: 'Ошибка в теле запроса'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+  '/records/{id}':
+    get:
+      tags:
+        - Записи
+      summary: Чтение
+      operationId: 294e4161984dbdcc369c99263c0bc4b2
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Идентификатор записи'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        '404':
+          description: 'Сущность не найдена'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+    put:
+      tags:
+        - Записи
+      summary: Редактирование
+      operationId: f60d085ed4df62eb71783c350dc33f33
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Идентификатор записи'
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecordBody'
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        '404':
+          description: 'Сущность не найдена'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '400':
+          description: 'Ошибка в теле запроса'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+    delete:
+      tags:
+        - Записи
+      summary: Удаление
+      operationId: f33d390803775a76fa4c297e11ef2378
+      parameters:
+        -
+          name: id
+          in: path
+          description: 'Идентификатор записи'
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Record'
+        '404':
+          description: 'Сущность не найдена'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error404'
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+  /auth/signin:
+    post:
+      tags:
+        - Авторизация
+      summary: Аутентификация
+      operationId: a096115b75f693576d634995a8f938e1
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '400':
+          description: 'Ошибка в теле запроса'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error400'
+  /auth/refresh:
+    post:
+      tags:
+        - Авторизация
+      summary: 'Обновление токена'
+      operationId: b434f5ea0b2d96129f92f5adf2d5755f
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+  /auth/@me:
+    get:
+      tags:
+        - Авторизация
+      summary: 'Данные о пользователе'
+      operationId: d35c6707a61379fd23cf9c92add56fd8
+      responses:
+        '200':
+          description: 'Успешный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfo'
+        '401':
+          description: 'Неавторизованный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error401'
+      security:
+        -
+          bearerAuth: []
+components:
+  schemas:
+    UserStatusEnum:
+      description: 'Статус пользователя (0 - Неактивный, 1 - Активный, 100 - Админ)'
+      type: integer
+      default: 1
+      enum:
+        - 0
+        - 1
+        - 100
+    Error400:
+      description: 'Ошибка в запросе'
+      properties:
+        name:
+          description: 'Наименование ошибки'
+          type: string
+          example: 'Bad Request'
+        message:
+          description: 'Описание ошибки'
+          type: string
+          example: 'RequiredField cannot be blank.'
+        code:
+          description: 'Код ошибки'
+          type: integer
+          example: 0
+        status:
+          description: 'HTTP статус код'
+          type: integer
+          example: 400
+        type:
+          description: 'Тип исключения'
+          type: string
+          example: yii\web\BadRequestHttpException
+      type: object
+    Error401:
+      description: 'Не авторизован'
+      properties:
+        name:
+          description: 'Наименование ошибки'
+          type: string
+          example: Unauthorized
+        message:
+          description: 'Описание ошибки'
+          type: string
+          example: 'Your request was made with invalid credentials.'
+        code:
+          description: 'Код ошибки'
+          type: integer
+          example: 0
+        status:
+          description: 'HTTP статус код'
+          type: integer
+          example: 401
+        type:
+          description: 'Тип исключения'
+          type: string
+          example: yii\web\UnauthorizedHttpException
+      type: object
+    Error404:
+      description: 'Сущность не найдена'
+      properties:
+        name:
+          description: 'Наименование ошибки'
+          type: string
+          example: 'Not Found'
+        message:
+          description: 'Описание ошибки'
+          type: string
+          example: 'Entity not found.'
+        code:
+          description: 'Код ошибки'
+          type: integer
+          example: 0
+        status:
+          description: 'HTTP статус код'
+          type: integer
+          example: 404
+        type:
+          description: 'Тип исключения'
+          type: string
+          example: yii\web\NotFoundHttpException
+      type: object
+    PaginationMeta:
+      properties:
+        totalCount:
+          description: 'Количество результатов'
+          type: integer
+          example: 10
+        pageCount:
+          description: 'Количество страниц'
+          type: integer
+          example: 1
+        currentPage:
+          description: 'Текущая страница'
+          type: integer
+          example: 1
+        pageSize:
+          description: 'Количество результатов на странице'
+          type: integer
+          example: 10
+      type: object
+    RecordBody:
+      required:
+        - f
+        - i
+        - city
+        - address
+        - birthday
+        - phone
+      properties:
+        f:
+          description: Фамилия
+          type: string
+          example: Достоевский
+        i:
+          description: Имя
+          type: string
+          example: Фёдор
+        o:
+          description: Отчество
+          type: string
+          example: Михайлович
+        city:
+          description: Город
+          type: string
+          example: Москва
+        address:
+          description: Адрес
+          type: string
+          example: 'Новая Божедомка'
+        birthday:
+          description: 'Дата рождения'
+          type: string
+          format: date
+          example: '1821-10-30'
+        phone:
+          description: 'Номер телефона'
+          type: string
+          format: date
+          example: 28-18-81
+      type: object
+    Record:
+      allOf:
+        -
+          required:
+            - id
+          properties:
+            id:
+              description: 'Идентификатор записи'
+              type: integer
+              example: 3
+          type: object
+        -
+          $ref: '#/components/schemas/RecordBody'
+    LoginForm:
+      required:
+        - email
+        - password
+      properties:
+        email:
+          description: E-mail
+          type: string
+          example: mail@example.com
+        password:
+          description: Пароль
+          type: string
+          example: qwe123
+      type: object
+    AuthResponse:
+      properties:
+        access_token:
+          description: 'JWT токен доступа'
+          type: string
+          example: eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MDY5MDcyNDEsImV4cCI6MTcwNjkwNzM2MSwidXNlcl9pZCI6MX0.zANpfOSakz9HEQ1Ew1siC30OuZFeHHxpUf_AfcrGHAo
+      type: object
+    UserInfo:
+      properties:
+        id:
+          description: Идентификатор
+          type: integer
+          example: 1
+        name:
+          description: 'Полное имя'
+          type: string
+          example: Александр
+        email:
+          description: 'Электронная почта'
+          type: string
+          example: mail@example.com
+        created_at:
+          description: 'Дата и время создания'
+          type: string
+          format: date-time
+          example: '2024-02-02 22:08:57'
+        status:
+          $ref: '#/components/schemas/UserStatusEnum'
+      type: object
+  securitySchemes:
+    bearerAuth:
+      type: http
+      bearerFormat: JWT
+      scheme: bearer
